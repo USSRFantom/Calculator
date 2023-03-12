@@ -238,7 +238,7 @@ class LexAnalyze {
     String result = '';
     for (int position = 0; position < text.length; position++) {
       if (text[position] == '+' && text[position + 1] == '-') {
-        result = result + "+(0-" + text[position + 2] + ")";
+        result = "$result+(0-${text[position + 2]})";
         position = position + 2;
       } else if (text[position] == '-' && text[position + 1] == '-') {
         result = result + "-(0-" + text[position + 2] + ")";
