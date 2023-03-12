@@ -95,7 +95,7 @@ class LexAnalyze {
           pos++;
           continue;
         default:
-          if (int.parse(c) <= 9 && int.parse(c) >= 0) {
+          if (int.tryParse(c)! <= 9 && int.tryParse(c)! >= 0) {
             String a = '';
             do {
               a = a + c;
@@ -237,10 +237,6 @@ class LexAnalyze {
   static String checkForUnaryMinus(String text) {
     String result = '';
     for (int position = 0; position < text.length; position++) {
-      print('колличество элементов в тексте' + text.length.toString());
-
-      print('Стартуем с позиции ');
-      print(position);
       if (text[position] == '+' && text[position + 1] == '-') {
         result = result + "+(0-" + text[position + 2] + ")";
         position = position + 2;
