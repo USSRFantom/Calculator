@@ -7,6 +7,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,12 +23,15 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   String receivedText = "";
+  Map<String, double> usersVariables = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,13 +46,13 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
             child: TextField(
                 onSubmitted: (text) {
-                  ///разбиваем строку на тип и значение
-                  List<Lexeme> result = LexAnalyze.lexAnalyze(expText: text);
-                  LexemeBuffer lexemeBuffer = LexemeBuffer(result);
-                  var end = LexAnalyze.expr(lexemeBuffer);
-
+                  ExpressionInterpreter interpreter =
+                      ExpressionInterpreter(text);
+                  var result = interpreter.analyzeInput(usersVariables);
+                  // LexemeBuffer lexemeBuffer = LexemeBuffer(result);
+                  // var end = interpreter.expr(lexemeBuffer);
                   setState(() {
-                    receivedText = end.toString();
+                    receivedText = result.toString();
                   });
                 },
                 decoration: const InputDecoration(
@@ -56,6 +60,40 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(Icons.login),
                   hintText: "Введите математическое выражение",
                 )),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('X = '),
+                ),
+              ),
+              SizedBox(
+                width: 40,
+                height: 40,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: TextField(
+                      onSubmitted: (text) {
+                        var xValue = double.tryParse(text);
+
+                        setState(() {
+                          usersVariables.putIfAbsent('x', () => xValue ?? 0);
+
+                          //usersVariables = {...usersVariables, x:xValue??0};
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "x",
+                      )),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10),
