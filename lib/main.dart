@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String receivedText = "";
-  Map<String, double> usersVariables = {};
+  Map<String, double?> usersVariables = {};
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              const SizedBox(
                 width: 30,
                 height: 30,
                 child: Align(
@@ -80,11 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: TextField(
                       onSubmitted: (text) {
                         var xValue = double.tryParse(text);
-
                         setState(() {
-                          usersVariables.putIfAbsent('x', () => xValue ?? 0);
-
-                          //usersVariables = {...usersVariables, x:xValue??0};
+                          usersVariables.putIfAbsent('x', () => xValue);
                         });
                       },
                       decoration: const InputDecoration(

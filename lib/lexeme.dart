@@ -3,22 +3,48 @@ class ExpressionInterpreter {
 
   ExpressionInterpreter(this.mathExpression);
 
-  double analyzeInput(Map<String, double> inputVariables) {
+  String analyzeInput(Map<String, double?> inputVariables) {
     String mathExp = mathExpression;
-//TODO: разобраться
-    ///replaceAll
-    ///переменных с человеческим видом
-    ///скобки
+
+    // подстановка переменных
     inputVariables.forEach((key, value) {
-      print(key);
-      if (value > 0) {
+      if (value == null) {
         return;
       }
       RegExp pattern = RegExp(key, caseSensitive: false);
       mathExp = mathExp.replaceAll(pattern, value.toString());
     });
-    print(mathExp);
 
+    return computeWithBrackets(mathExp);
+  }
+
+  // сделать првоерку чтобы скобки были парными
+  String computeWithBrackets(String expr) {
+    Iterable bracketMatches = RegExp(r'\(').allMatches(expr);
+    if (bracketMatches.isNotEmpty) {
+      RegExpMatch lastBracketMatch = bracketMatches.last;
+      int firstBracketIndex = lastBracketMatch.end;
+      String stringWithClosingBracket = expr.substring(firstBracketIndex);
+      String stringBeforeOpeningBracket =
+          expr.substring(0, firstBracketIndex - 1);
+      Iterable closingBracketMatch =
+          RegExp(r'\)').allMatches(stringWithClosingBracket);
+      RegExpMatch firstBracketMatch = closingBracketMatch.first;
+      int lastBracketIndex = firstBracketMatch.end;
+      String stringAfterClosingBracket =
+          stringWithClosingBracket.substring(lastBracketIndex);
+      String toCalculate =
+          stringWithClosingBracket.substring(0, lastBracketIndex - 1);
+      String calculationResult = calculator(toCalculate);
+      return computeWithBrackets(stringBeforeOpeningBracket +
+          calculationResult +
+          stringAfterClosingBracket);
+    }
+    return calculator(expr).replaceFirst(RegExp(r'\.?0*$'), '');
+  }
+
+  String calculator(String expr) {
+    String mathExp = expr;
     final baseNumberRegExp = RegExp(r'^-?\d+(\.\d+)?');
 
     String _parseFloatString(String text) {
@@ -62,6 +88,6 @@ class ExpressionInterpreter {
           print('неизвестный опперанд "$operand"');
       }
     }
-    return result;
+    return result.toString();
   }
 }
