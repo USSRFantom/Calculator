@@ -18,6 +18,12 @@ class ExpressionInterpreter {
     return computeWithBrackets(mathExp);
   }
 
+  /// неработают дроби
+  /// x y z сделать красиво
+  /// в методе calculator реализовать логику приоритета умножения деления над сложением вычитанием
+  /// в методе computeWithBrackets реализовать логикупостановки знака умножения если пере открывающей скобкой стоит число
+  /// бонус проверить все юнитестами
+
   // сделать првоерку чтобы скобки были парными
   String computeWithBrackets(String expr) {
     Iterable bracketMatches = RegExp(r'\(').allMatches(expr);
