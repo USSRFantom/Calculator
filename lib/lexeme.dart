@@ -18,10 +18,7 @@ class ExpressionInterpreter {
     return computeWithBrackets(mathExp);
   }
 
-  /// неработают дроби
   /// x y z сделать красиво
-  /// в методе calculator реализовать логику приоритета умножения деления над сложением вычитанием
-  /// в методе computeWithBrackets реализовать логикупостановки знака умножения если пере открывающей скобкой стоит число
   /// бонус проверить все юнитестами
 
   // сделать првоерку чтобы скобки были парными
@@ -42,7 +39,10 @@ class ExpressionInterpreter {
       String toCalculate =
           stringWithClosingBracket.substring(0, lastBracketIndex - 1);
       String calculationResult = calculator(toCalculate);
+      String multipleOperator =
+          multipleOperatorTest(stringBeforeOpeningBracket);
       return computeWithBrackets(stringBeforeOpeningBracket +
+          multipleOperator +
           calculationResult +
           stringAfterClosingBracket);
     }
@@ -115,5 +115,13 @@ class ExpressionInterpreter {
     }
 
     return mathExp;
+  }
+
+  String multipleOperatorTest(String expr) {
+    if (expr.isEmpty) {
+      return '';
+    }
+    String lastChar = expr[expr.length - 1];
+    return int.tryParse(lastChar) == null ? '' : '*';
   }
 }
