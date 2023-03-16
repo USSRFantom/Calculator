@@ -50,7 +50,7 @@ class ExpressionInterpreter {
   }
 
   String calculator(String expr) {
-    String mathExp = expr;
+    String mathExp = topLevelCalculations(expr);
     final baseNumberRegExp = RegExp(r'^-?\d+(\.\d+)?');
 
     String _parseFloatString(String text) {
@@ -83,17 +83,37 @@ class ExpressionInterpreter {
         case '+':
           result = result + secondValue;
           break;
-        case '*':
-          result = result * secondValue;
-          break;
-        case '/':
-          result = result / secondValue;
-          break;
         default:
           // TODO: ошибка вернуть 0
           print('неизвестный опперанд "$operand"');
       }
     }
     return result.toString();
+  }
+
+  String topLevelCalculations(String expr) {
+    String mathExp = expr;
+    const pattern =
+        r'(?<left>\d+(\.\d+)?)(?<operand>[*/])(?<right>\d+(\.\d+)?)';
+
+    final topLevelReGExp = RegExp(pattern);
+    RegExpMatch? regExpMatch = topLevelReGExp.firstMatch(mathExp);
+    if (regExpMatch != null) {
+      double leftNumber = double.parse(regExpMatch.namedGroup('left')!);
+      double rightNumber = double.parse(regExpMatch.namedGroup('right')!);
+      String operand = regExpMatch.namedGroup('operand')!;
+
+      String result = '';
+      if (operand == '*') {
+        result = (leftNumber * rightNumber).toString();
+      }
+      if (operand == '/') {
+        result = (leftNumber / rightNumber).toString();
+      }
+      mathExp = mathExp.replaceFirst(topLevelReGExp, result);
+      return topLevelCalculations(mathExp);
+    }
+
+    return mathExp;
   }
 }
