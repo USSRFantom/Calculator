@@ -49,8 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ExpressionInterpreter interpreter =
                       ExpressionInterpreter(text);
                   var result = interpreter.analyzeInput(usersVariables);
-                  // LexemeBuffer lexemeBuffer = LexemeBuffer(result);
-                  // var end = interpreter.expr(lexemeBuffer);
+
                   setState(() {
                     receivedText = result.toString();
                   });
@@ -73,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               SizedBox(
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
                 child: Align(
                   alignment: Alignment.center,
                   child: TextField(

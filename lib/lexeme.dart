@@ -5,7 +5,6 @@ class ExpressionInterpreter {
 
   String analyzeInput(Map<String, double?> inputVariables) {
     String mathExp = mathExpression;
-
     // подстановка переменных
     inputVariables.forEach((key, value) {
       if (value == null) {
@@ -17,9 +16,6 @@ class ExpressionInterpreter {
 
     return computeWithBrackets(mathExp);
   }
-
-  /// x y z сделать красиво
-  /// бонус проверить все юнитестами
 
   // сделать првоерку чтобы скобки были парными
   String computeWithBrackets(String expr) {
