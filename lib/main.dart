@@ -1,3 +1,4 @@
+import 'package:calculator/lexeme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -28,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String receivedText = "";
+  String text = '';
   Map<String, double?> usersVariables = {};
   List<String> simbol = [
     '+',
@@ -45,8 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
     '9',
     '0',
     '.',
-    '='
+    '=',
+    'C',
   ];
+  ExpressionInterpreter interpreter = ExpressionInterpreter('');
 
   @override
   Widget build(BuildContext context) {
@@ -58,18 +62,18 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const Align(
+            Align(
               alignment: Alignment.centerRight,
               child: Text(
-                '',
-                style: TextStyle(color: Colors.grey, fontSize: 25),
+                text,
+                style: const TextStyle(color: Colors.grey, fontSize: 25),
               ),
             ),
-            const Align(
+            Align(
               alignment: Alignment.centerRight,
               child: Text(
-                '0',
-                style: TextStyle(color: Colors.white, fontSize: 40),
+                receivedText,
+                style: const TextStyle(color: Colors.white, fontSize: 40),
               ),
             ),
             const Divider(
@@ -92,10 +96,39 @@ class _MyHomePageState extends State<MyHomePage> {
                           shape: BoxShape.circle,
                         ),
                         child: Center(
-                          child: Text(
-                            simbol[index].toString(),
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 40),
+                          child: InkWell(
+                            onTap: () {
+                              if (simbol[index].toString() == 'C') {
+                                receivedText = "";
+                                text = '';
+                                interpreter = ExpressionInterpreter(text);
+                                var result =
+                                    interpreter.analyzeInput(usersVariables);
+
+                                setState(() {
+                                  receivedText = result.toString();
+                                });
+                              } else {
+                                if (simbol[index].toString() != '=') {
+                                  setState(() {
+                                    text = text + simbol[index].toString();
+                                  });
+                                } else {
+                                  interpreter = ExpressionInterpreter(text);
+                                  var result =
+                                      interpreter.analyzeInput(usersVariables);
+
+                                  setState(() {
+                                    receivedText = result.toString();
+                                  });
+                                }
+                              }
+                            },
+                            child: Text(
+                              simbol[index].toString(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 40),
+                            ),
                           ),
                         ),
                       ),
@@ -113,7 +146,6 @@ class _MyHomePageState extends State<MyHomePage> {
       //     Padding(
       //       padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
       //       child: TextField(
-      //         textDirection: ,
       //           onSubmitted: (text) {
       //             ExpressionInterpreter interpreter =
       //                 ExpressionInterpreter(text);
