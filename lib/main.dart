@@ -36,6 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
     '-',
     '/',
     '*',
+    'X',
+    '.',
+    '(',
+    ')',
     '1',
     '2',
     '3',
@@ -46,7 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
     '8',
     '9',
     '0',
-    '.',
     '=',
     'C',
   ];
@@ -88,42 +91,42 @@ class _MyHomePageState extends State<MyHomePage> {
                   (index) {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: index < 4 ? Colors.amber : Colors.grey,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: InkWell(
-                            onTap: () {
-                              if (simbol[index].toString() == 'C') {
-                                receivedText = "";
-                                text = '';
-                                interpreter = ExpressionInterpreter(text);
-                                var result =
-                                    interpreter.analyzeInput(usersVariables);
+                      child: InkWell(
+                        onTap: () {
+                          if (simbol[index].toString() == 'C') {
+                            receivedText = "";
+                            text = '';
+                            interpreter = ExpressionInterpreter(text);
+                            var result =
+                                interpreter.analyzeInput(usersVariables);
 
-                                setState(() {
-                                  receivedText = result.toString();
-                                });
-                              } else {
-                                if (simbol[index].toString() != '=') {
-                                  setState(() {
-                                    text = text + simbol[index].toString();
-                                  });
-                                } else {
-                                  interpreter = ExpressionInterpreter(text);
-                                  var result =
-                                      interpreter.analyzeInput(usersVariables);
+                            setState(() {
+                              receivedText = result.toString();
+                            });
+                          } else {
+                            if (simbol[index].toString() != '=') {
+                              setState(() {
+                                text = text + simbol[index].toString();
+                              });
+                            } else {
+                              interpreter = ExpressionInterpreter(text);
+                              var result =
+                                  interpreter.analyzeInput(usersVariables);
 
-                                  setState(() {
-                                    receivedText = result.toString();
-                                  });
-                                }
-                              }
-                            },
+                              setState(() {
+                                receivedText = result.toString();
+                              });
+                            }
+                          }
+                        },
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: index < 8 ? Colors.amber : Colors.grey,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
                             child: Text(
                               simbol[index].toString(),
                               style: const TextStyle(
