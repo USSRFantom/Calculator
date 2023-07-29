@@ -30,13 +30,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String receivedText = "";
   String text = '';
+  String x = '0';
   Map<String, double?> usersVariables = {};
   List<String> simbol = [
     '+',
     '-',
     '/',
     '*',
-    'X',
+    'x',
     '.',
     '(',
     ')',
@@ -65,6 +66,29 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              child: Align(
+                alignment: Alignment.center,
+                child: TextField(
+                  onSubmitted: (text) {
+                    x = text;
+                    var xValue = double.tryParse(x);
+                    usersVariables = {};
+                    setState(() {
+                      usersVariables.putIfAbsent('x', () => xValue);
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Введите значение X",
+                  ),
+                ),
+              ),
+            ),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -96,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (simbol[index].toString() == 'C') {
                             receivedText = "";
                             text = '';
+                            x = '';
                             interpreter = ExpressionInterpreter(text);
                             var result =
                                 interpreter.analyzeInput(usersVariables);
